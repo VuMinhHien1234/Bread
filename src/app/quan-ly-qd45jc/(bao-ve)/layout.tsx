@@ -20,7 +20,8 @@ export default async function AdminLayout({ children }: { children: ReactNode })
     <div className="mx-auto min-h-dvh w-full max-w-5xl px-4 py-4">
       <header className="flex items-center justify-between gap-3">
         <p className="font-heading text-2xl text-primary">
-          {shopConfig.name} <span className="text-base italic text-brass-text">· Quản trị</span>
+          {shopConfig.name}{" "}
+          <span className="hidden text-base italic text-brass-text sm:inline">· Quản trị</span>
         </p>
         <div className="flex items-center gap-2">
           <span className="hidden text-sm text-text-muted sm:inline">{session.user.email}</span>

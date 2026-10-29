@@ -5,6 +5,7 @@ import { useState, type FormEvent } from "react";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { authClient } from "@/lib/auth-client";
+import { ADMIN_BASE } from "@/lib/admin-path";
 
 const RATE_LIMITED_STATUS = 429;
 
@@ -25,15 +26,11 @@ export function LoginForm() {
     });
 
     if (signInError) {
-      setError(
-        signInError.status === RATE_LIMITED_STATUS
-          ? "Bạn nhập sai quá nhiều lần. Vui lòng thử lại sau 15 phút."
-          : "Email hoặc mật khẩu chưa đúng.",
-      );
+      setError(describeSignInError(signInError));
       setIsSubmitting(false);
       return;
     }
-    router.replace("/admin");
+    router.replace(ADMIN_BASE);
     router.refresh();
   }
 
@@ -54,4 +51,19 @@ export function LoginForm() {
       </Button>
     </form>
   );
+}
+
+const INVALID_CREDENTIALS_STATUS = 401;
+const FORBIDDEN_STATUS = 403;
+
+/** Tách rõ "sai mật khẩu" với lỗi cấu hình/máy chủ để dễ tìm nguyên nhân. */
+function describeSignInError(error: { status?: number; message?: string | undefined }): string {
+  if (error.status === RATE_LIMITED_STATUS) {
+    return "Bạn nhập sai quá nhiều lần. Vui lòng thử lại sau 15 phút.";
+  }
+  if (error.status === INVALID_CREDENTIALS_STATUS) return "Email hoặc mật khẩu chưa đúng.";
+  if (error.status === FORBIDDEN_STATUS) {
+    return `Địa chỉ trang (${window.location.origin}) không khớp BETTER_AUTH_URL trong cấu hình. Mở đúng địa chỉ đó hoặc sửa biến này.`;
+  }
+  return `Không đăng nhập được (lỗi ${error.status ?? "mạng"}${error.message ? `: ${error.message}` : ""}). Thử lại hoặc báo người quản lý web.`;
 }

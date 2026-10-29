@@ -22,7 +22,7 @@ npm run admin:create -- --email chu@tiem.vn   # đặt ADMIN_PASSWORD trước k
    - Push `main` → bản chính thức; mỗi pull request → bản xem trước (Deploy Preview).
    - Nếu không muốn bản xem trước gửi tin Telegram thật, đặt biến riêng cho ngữ cảnh "Deploy Previews" (TELEGRAM_CHAT_ID của nhóm thử).
 4. **Migration**: khi có migration mới, vào Actions → "Migration database" → Run workflow, gõ `migrate` (cần secret `DATABASE_URL`). Hoặc chạy `npm run db:migrate` ở máy.
-5. Sau khi deploy xong, thử: đặt món → tin nhắn Telegram → đăng nhập `/admin/dang-nhap`.
+5. Sau khi deploy xong, thử: đặt món → tin nhắn Telegram → đăng nhập `/quan-ly-qd45jc/dang-nhap` (đường dẫn quản trị đặt trong `src/lib/admin-path.ts`).
 
 ## 5. Sao lưu hằng tuần (GitHub Actions → Google Drive)
 File `.github/workflows/backup.yml` (chạy 03:00 sáng Chủ nhật giờ VN, giữ khoảng 3 tháng). Cần:

@@ -1,4 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
+import { adminPath } from "@/lib/admin-path";
 
 vi.mock("server-only", () => ({}));
 const getServerEnv = vi.fn();
@@ -48,7 +49,7 @@ describe("formatOrderRequestMessage", () => {
     expect(text).toContain("⏰ Sớm nhất có thể");
     expect(text).toContain("• 2 × Bánh mì thịt nướng (Đặc biệt) — 70.000₫");
     expect(text).toContain("💰 Tạm tính: 90.000₫ (giá tham khảo)");
-    expect(text).toContain("https://example.vn/admin/yeu-cau/req-1");
+    expect(text).toContain(`https://example.vn${adminPath("yeu-cau/req-1")}`);
   });
 
   it("hiện địa chỉ khi giao, giờ hẹn, ghi chú và cờ ngoài giờ", () => {
@@ -85,7 +86,7 @@ describe("formatContactMessage", () => {
       siteUrl: "https://example.vn",
     });
     expect(text).toContain("Trần Thị B — b@gmail.com");
-    expect(text).toContain("https://example.vn/admin/lien-he");
+    expect(text).toContain(`https://example.vn${adminPath("lien-he")}`);
   });
 });
 

@@ -7,7 +7,7 @@
  */
 import { randomBytes } from "node:crypto";
 import { parseArgs } from "node:util";
-import { count, eq } from "drizzle-orm";
+import { eq } from "drizzle-orm";
 import { getAuth } from "@/server/auth/auth";
 import { getDb } from "@/server/db";
 import { user } from "@/server/db/schema";
@@ -40,10 +40,12 @@ async function main() {
     await ctx.internalAdapter.updatePassword(existing.user.id, hash);
     console.log(`Đã đặt lại mật khẩu cho ${email}.`);
   } else {
-    const [admins] = await db.select({ total: count() }).from(user).where(eq(user.role, "ADMIN"));
-    if ((admins?.total ?? 0) > 0) {
+    const admins = await db.select({ email: user.email }).from(user).where(eq(user.role, "ADMIN"));
+    if (admins.length > 0) {
+      const current = admins.map((admin) => admin.email).join(", ");
       throw new Error(
-        "Đã có tài khoản quản trị. Dự án chỉ dùng 1 tài khoản (dùng --reset-password cho tài khoản đó).",
+        `Đã có tài khoản quản trị: ${current}. Dự án chỉ dùng 1 tài khoản — đặt lại mật khẩu bằng:\n` +
+          `  npm run admin:create -- --email ${admins[0]?.email ?? "<email>"} --reset-password`,
       );
     }
     const created = await ctx.internalAdapter.createUser(

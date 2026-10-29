@@ -1,10 +1,11 @@
 import { type NextRequest, NextResponse } from "next/server";
+import { ADMIN_LOGIN_PATH } from "@/lib/admin-path";
 
 /**
- * Chặn sớm /admin/* khi không có cookie phiên (chỉ là lớp ngoài, nhanh).
+ * Chặn sớm trang quản trị (xem src/lib/admin-path.ts) khi không có cookie phiên (chỉ là lớp ngoài, nhanh).
  * Kiểm tra quyền thật vẫn nằm ở layout admin và requireAdmin() trong mọi action.
  */
-const LOGIN_PATH = "/admin/dang-nhap";
+const LOGIN_PATH = ADMIN_LOGIN_PATH;
 
 export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
@@ -21,4 +22,5 @@ export function proxy(request: NextRequest) {
   return NextResponse.redirect(url);
 }
 
-export const config = { matcher: ["/admin/:path*"] };
+// Phải là chuỗi cố định (Next.js đọc lúc build) — giữ trùng với ADMIN_SEGMENT, có test kiểm tra
+export const config = { matcher: ["/quan-ly-qd45jc/:path*"] };

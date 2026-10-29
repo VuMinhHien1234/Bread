@@ -5,6 +5,7 @@ import { Pagination } from "@/components/admin/Pagination";
 import { cn } from "@/lib/cn";
 import { isOrderStatus, orderStatuses, orderStatusLabel } from "@/lib/admin-labels";
 import { listOrderRequests } from "@/server/queries/admin";
+import { ADMIN_BASE, adminPath } from "@/lib/admin-path";
 
 export const metadata: Metadata = { title: "Yêu cầu đặt món", robots: { index: false } };
 
@@ -23,7 +24,7 @@ export default async function OrderRequestsPage({ searchParams }: Props) {
     if (status) query.set("trang-thai", status);
     if (page > 1) query.set("trang", String(page));
     const text = query.toString();
-    return text ? `/admin/yeu-cau?${text}` : "/admin/yeu-cau";
+    return text ? `${ADMIN_BASE}/yeu-cau?${text}` : adminPath("yeu-cau");
   };
 
   return (
@@ -33,7 +34,7 @@ export default async function OrderRequestsPage({ searchParams }: Props) {
         {[undefined, ...orderStatuses].map((entry) => (
           <Link
             key={entry ?? "all"}
-            href={entry ? `/admin/yeu-cau?trang-thai=${entry}` : "/admin/yeu-cau"}
+            href={entry ? `${ADMIN_BASE}/yeu-cau?trang-thai=${entry}` : adminPath("yeu-cau")}
             aria-current={entry === status ? "true" : undefined}
             className={cn(
               "inline-flex min-h-11 shrink-0 items-center rounded-full border-2 px-4 font-semibold",

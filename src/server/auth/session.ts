@@ -2,8 +2,9 @@ import "server-only";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { getAuth } from "./auth";
+import { ADMIN_LOGIN_PATH } from "@/lib/admin-path";
 
-export const ADMIN_LOGIN_PATH = "/admin/dang-nhap";
+export { ADMIN_LOGIN_PATH };
 
 /** Ném ra khi chưa đăng nhập hoặc không phải quản trị viên; server action bắt lại và trả `ActionResult`. */
 export class UnauthorizedError extends Error {

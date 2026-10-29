@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Button } from "@/components/ui/Button";
 import { authClient } from "@/lib/auth-client";
+import { adminPath } from "@/lib/admin-path";
 
 export function LogoutButton() {
   const router = useRouter();
@@ -12,12 +13,17 @@ export function LogoutButton() {
   async function handleClick() {
     setIsPending(true);
     await authClient.signOut();
-    router.replace("/admin/dang-nhap");
+    router.replace(adminPath("dang-nhap"));
     router.refresh();
   }
 
   return (
-    <Button variant="ghost" onClick={handleClick} isLoading={isPending}>
+    <Button
+      variant="ghost"
+      onClick={handleClick}
+      isLoading={isPending}
+      className="whitespace-nowrap"
+    >
       Đăng xuất
     </Button>
   );

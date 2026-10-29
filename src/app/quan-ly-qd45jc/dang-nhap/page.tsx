@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import { LoginForm } from "@/components/admin/LoginForm";
 import { Logo } from "@/components/site/Logo";
 import { getOptionalAdminSession } from "@/server/auth/session";
+import { ADMIN_BASE } from "@/lib/admin-path";
 
 export const metadata: Metadata = { title: "Đăng nhập quản trị", robots: { index: false } };
 
@@ -11,7 +12,7 @@ export const dynamic = "force-dynamic";
 
 export default async function AdminLoginPage() {
   // Đã đăng nhập rồi thì vào thẳng trang quản trị
-  if (await getOptionalAdminSession()) redirect("/admin");
+  if (await getOptionalAdminSession()) redirect(ADMIN_BASE);
 
   return (
     <main className="flex min-h-dvh items-center justify-center px-5 py-10">

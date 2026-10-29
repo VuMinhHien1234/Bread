@@ -1,4 +1,5 @@
 import type { NextConfig } from "next";
+import { ADMIN_BASE } from "./src/lib/admin-path";
 
 const isDev = process.env.NODE_ENV !== "production";
 
@@ -31,7 +32,17 @@ const nextConfig: NextConfig = {
     remotePatterns: [{ protocol: "https", hostname: "res.cloudinary.com" }],
   },
   async headers() {
-    return [{ source: "/:path*", headers: securityHeaders }];
+    return [
+      { source: "/:path*", headers: securityHeaders },
+      // Trang quản trị: không cho máy tìm kiếm lưu, không cho trình duyệt cache
+      {
+        source: `${ADMIN_BASE}/:path*`,
+        headers: [
+          { key: "X-Robots-Tag", value: "noindex, nofollow" },
+          { key: "Cache-Control", value: "no-store" },
+        ],
+      },
+    ];
   },
 };
 

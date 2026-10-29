@@ -9,6 +9,7 @@ import {
   orderStatusTone,
   type OrderStatus,
 } from "@/lib/admin-labels";
+import { ADMIN_BASE } from "@/lib/admin-path";
 
 export type OrderRowData = {
   id: string;
@@ -41,7 +42,7 @@ export function OrderRows({ rows }: { rows: OrderRowData[] }) {
           className="flex items-stretch gap-2 rounded-card border border-border bg-surface shadow-card"
         >
           <Link
-            href={`/admin/yeu-cau/${row.id}`}
+            href={`${ADMIN_BASE}/yeu-cau/${row.id}`}
             className="flex min-w-0 flex-1 flex-col gap-1 p-4"
           >
             <span className="flex flex-wrap items-center gap-2">

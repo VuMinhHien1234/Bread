@@ -1,6 +1,7 @@
 import { formatVND } from "@/lib/money";
 import { formatPhoneDisplay } from "@/lib/phone";
 import { formatVietnamDateTime } from "@/lib/datetime";
+import { ADMIN_BASE } from "@/lib/admin-path";
 
 /** Telegram ở chế độ HTML chỉ cần escape ba ký tự này. Mọi dữ liệu khách nhập phải qua hàm này. */
 export function escapeHtml(text: string): string {
@@ -54,7 +55,7 @@ export function formatOrderRequestMessage(input: OrderMessageInput): string {
 
   lines.push("", `💰 Tạm tính: ${formatVND(input.estimatedTotal)} (giá tham khảo)`);
   if (input.note) lines.push(`📝 Ghi chú: ${escapeHtml(input.note)}`);
-  lines.push("", `🔗 Xem: ${escapeHtml(`${input.siteUrl}/admin/yeu-cau/${input.id}`)}`);
+  lines.push("", `🔗 Xem: ${escapeHtml(`${input.siteUrl}${ADMIN_BASE}/yeu-cau/${input.id}`)}`);
 
   return lines.join("\n");
 }
@@ -79,7 +80,7 @@ export function formatContactMessage(input: ContactMessageInput): string {
   lines.push(
     `💬 ${escapeHtml(input.message)}`,
     "",
-    `🔗 Xem: ${escapeHtml(`${input.siteUrl}/admin/lien-he`)}`,
+    `🔗 Xem: ${escapeHtml(`${input.siteUrl}${ADMIN_BASE}/lien-he`)}`,
   );
   return lines.join("\n");
 }

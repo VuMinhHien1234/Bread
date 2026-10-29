@@ -4,13 +4,14 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Badge } from "@/components/ui/Badge";
 import { cn } from "@/lib/cn";
+import { ADMIN_BASE, adminPath } from "@/lib/admin-path";
 
 const links = [
-  { href: "/admin", label: "Tổng quan", exact: true },
-  { href: "/admin/yeu-cau", label: "Yêu cầu", showNewCount: true },
-  { href: "/admin/mon", label: "Món" },
-  { href: "/admin/danh-muc", label: "Danh mục" },
-  { href: "/admin/lien-he", label: "Liên hệ" },
+  { href: ADMIN_BASE, label: "Tổng quan", exact: true },
+  { href: adminPath("yeu-cau"), label: "Yêu cầu", showNewCount: true },
+  { href: adminPath("mon"), label: "Món" },
+  { href: adminPath("danh-muc"), label: "Danh mục" },
+  { href: adminPath("lien-he"), label: "Liên hệ" },
 ] as const;
 
 type Props = { newRequestCount: number };

@@ -9,6 +9,7 @@ import { cn } from "@/lib/cn";
 import { formatVietnamDateTime } from "@/lib/datetime";
 import { formatPhoneDisplay } from "@/lib/phone";
 import { listContactMessages } from "@/server/queries/admin";
+import { ADMIN_BASE, adminPath } from "@/lib/admin-path";
 
 export const metadata: Metadata = { title: "Tin liên hệ", robots: { index: false } };
 
@@ -27,7 +28,7 @@ export default async function ContactMessagesPage({ searchParams }: Props) {
     if (status) query.set("trang-thai", status);
     if (page > 1) query.set("trang", String(page));
     const text = query.toString();
-    return text ? `/admin/lien-he?${text}` : "/admin/lien-he";
+    return text ? `${ADMIN_BASE}/lien-he?${text}` : adminPath("lien-he");
   };
 
   return (
@@ -37,7 +38,7 @@ export default async function ContactMessagesPage({ searchParams }: Props) {
         {[undefined, "NEW", "HANDLED"].map((entry) => (
           <Link
             key={entry ?? "all"}
-            href={entry ? `/admin/lien-he?trang-thai=${entry}` : "/admin/lien-he"}
+            href={entry ? `${ADMIN_BASE}/lien-he?trang-thai=${entry}` : adminPath("lien-he")}
             className={cn(
               "inline-flex min-h-11 items-center rounded-full border-2 px-4 font-semibold",
               entry === status ? "border-primary bg-primary/10" : "border-border bg-surface",

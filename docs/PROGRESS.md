@@ -1,5 +1,8 @@
 # PROGRESS — Đã làm gì, kiểm tra được gì, còn gì
 
+## Cập nhật 2026-10-29 — Đổi đường dẫn quản trị
+- Trang quản trị chuyển từ `/admin` sang `/quan-ly-qd45jc` (đăng nhập: `/quan-ly-qd45jc/dang-nhap`). Một chỗ khai báo: `src/lib/admin-path.ts`; `/admin` giờ trả 404. robots.txt không còn liệt kê đường dẫn quản trị; trang quản trị gửi header `X-Robots-Tag: noindex` và `Cache-Control: no-store`. Có test giữ thư mục, matcher proxy và hằng số khớp nhau.
+
 ## Cập nhật 2026-10-14 — Giao diện sang trọng + sẵn sàng deploy
 - **Giao diện**: đổi font sang Newsreader (tiêu đề) + Source Sans 3 (nội dung), tự host; làm lại header (menu điện thoại toàn màn hình, đánh dấu trang đang xem), hero 2 cột có khung vòm, 3 điểm mạnh, thẻ món tỉ lệ 4:5, bảng danh mục kiểu thực đơn, chân trang 4 cột, nút liên hệ nổi dạng biểu tượng, trang lỗi/404, trang đăng nhập quản trị. Đã chụp màn hình kiểm tra máy tính và điện thoại (390px), không tràn ngang, không lỗi JavaScript.
 - **Sửa lỗi deploy**: (1) `package-lock.json` lệch với `package.json` → `npm ci` (CI/Netlify) sẽ lỗi; đã tạo lại. (2) Có cả `pnpm-lock.yaml` + `pnpm-workspace.yaml` chứa giá trị dang dở → Netlify sẽ chọn pnpm và lỗi; đã bỏ, dự án dùng npm. (3) `npm run typecheck` lỗi ở `scripts/telegram-chat-id.ts`; đã sửa. (4) `next build` lỗi khi không có biến môi trường (trang admin bị dựng sẵn lúc build); đã sửa — build không cần secret.

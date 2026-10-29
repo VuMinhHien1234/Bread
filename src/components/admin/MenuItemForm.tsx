@@ -10,6 +10,7 @@ import { Select } from "@/components/ui/Select";
 import { Textarea } from "@/components/ui/Textarea";
 import { createMenuItem, deleteMenuItem, updateMenuItem } from "@/server/actions/admin/menu-items";
 import { useAdminAction } from "./use-admin-action";
+import { ADMIN_BASE, adminPath } from "@/lib/admin-path";
 
 export type MenuItemFormValues = {
   categoryId: string;
@@ -121,7 +122,7 @@ export function MenuItemForm({ categories, itemId, initial }: Props) {
       return;
     }
     if (!itemId && typeof result.data === "object" && result.data !== null && "id" in result.data) {
-      router.push(`/admin/mon/${String((result.data as { id: unknown }).id)}`);
+      router.push(`${ADMIN_BASE}/mon/${String((result.data as { id: unknown }).id)}`);
     }
   }
 
@@ -304,7 +305,7 @@ export function MenuItemForm({ categories, itemId, initial }: Props) {
           onClick={async () => {
             if (!itemId) return;
             const result = await run(() => deleteMenuItem({ id: itemId }), "Đã xóa món");
-            if (result.ok) router.push("/admin/mon");
+            if (result.ok) router.push(adminPath("mon"));
           }}
         >
           Xóa món

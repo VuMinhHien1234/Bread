@@ -10,6 +10,7 @@ import { formatVietnamDateTime } from "@/lib/datetime";
 import { formatVND } from "@/lib/money";
 import { formatPhoneDisplay } from "@/lib/phone";
 import { getOrderRequest } from "@/server/queries/admin";
+import { adminPath } from "@/lib/admin-path";
 
 export const metadata: Metadata = { title: "Chi tiết yêu cầu", robots: { index: false } };
 
@@ -22,7 +23,7 @@ export default async function OrderRequestPage({ params }: Props) {
 
   return (
     <div className="flex max-w-2xl flex-col gap-6">
-      <Link href="/admin/yeu-cau" className="text-text-muted underline">
+      <Link href={adminPath("yeu-cau")} className="text-text-muted underline">
         ← Danh sách yêu cầu
       </Link>
 

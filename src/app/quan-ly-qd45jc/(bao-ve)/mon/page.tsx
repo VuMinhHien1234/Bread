@@ -5,6 +5,7 @@ import { Button, buttonClassName } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { Select } from "@/components/ui/Select";
 import { listCategories, listMenuItems } from "@/server/queries/admin";
+import { adminPath } from "@/lib/admin-path";
 
 export const metadata: Metadata = { title: "Món", robots: { index: false } };
 
@@ -24,7 +25,7 @@ export default async function MenuItemsPage({ searchParams }: Props) {
     <div className="flex max-w-2xl flex-col gap-4">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <h1 className="text-2xl">Món</h1>
-        <Link href="/admin/mon/moi" className={buttonClassName("primary")}>
+        <Link href={adminPath("mon/moi")} className={buttonClassName("primary")}>
           Thêm món
         </Link>
       </div>

@@ -3,6 +3,7 @@ import Link from "next/link";
 import { OrderRows } from "@/components/admin/OrderRows";
 import { buttonClassName } from "@/components/ui/Button";
 import { listContactMessages, listOrderRequests } from "@/server/queries/admin";
+import { adminPath } from "@/lib/admin-path";
 
 export const metadata: Metadata = { title: "Quản trị", robots: { index: false } };
 const LATEST_COUNT = 5;
@@ -20,14 +21,14 @@ export default async function AdminHomePage() {
 
       <div className="grid gap-3 sm:grid-cols-2">
         <Link
-          href="/admin/yeu-cau?trang-thai=NEW"
+          href={`${adminPath("yeu-cau")}?trang-thai=NEW`}
           className="rounded-card border border-border bg-surface p-5 shadow-card"
         >
           <p className="text-4xl font-bold text-primary">{newOrders.total}</p>
           <p className="text-text-muted">yêu cầu đặt món mới</p>
         </Link>
         <Link
-          href="/admin/lien-he?trang-thai=NEW"
+          href={`${adminPath("lien-he")}?trang-thai=NEW`}
           className="rounded-card border border-border bg-surface p-5 shadow-card"
         >
           <p className="text-4xl font-bold text-primary">{newMessages.total}</p>
@@ -40,14 +41,14 @@ export default async function AdminHomePage() {
           <h2 id="moi-nhat" className="text-xl">
             Yêu cầu mới nhất
           </h2>
-          <Link href="/admin/yeu-cau" className="font-medium text-primary underline">
+          <Link href={adminPath("yeu-cau")} className="font-medium text-primary underline">
             Xem tất cả
           </Link>
         </div>
         <OrderRows rows={latest.rows.slice(0, LATEST_COUNT)} />
       </section>
 
-      <Link href="/admin/mon" className={buttonClassName("secondary", "lg")}>
+      <Link href={adminPath("mon")} className={buttonClassName("secondary", "lg")}>
         Quản lý món và bật &quot;Tạm hết hôm nay&quot;
       </Link>
     </div>
