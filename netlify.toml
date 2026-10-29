@@ -6,6 +6,9 @@
 [build.environment]
   NODE_VERSION = "22"
   NEXT_TELEMETRY_DISABLED = "1"
+  # Các biến này không phải bí mật (tên thư mục ảnh, cloud name, URL site) và xuất hiện hợp lệ trong mã/bản build.
+  # Netlify vẫn quét các biến thật sự bí mật (DATABASE_URL, API secret, token Telegram...).
+  SECRETS_SCAN_OMIT_KEYS = "CLOUDINARY_FOLDER,CLOUDINARY_CLOUD_NAME,BETTER_AUTH_URL,NEXT_PUBLIC_SITE_URL,NEXT_PUBLIC_GA_ID"
 
 # Font tự host: cache dài hạn (tên file có mã băm nên đổi font sẽ đổi URL)
 [[headers]]

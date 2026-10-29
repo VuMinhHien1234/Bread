@@ -17,6 +17,7 @@
     "telegram:test": "tsx --conditions=react-server --env-file-if-exists=.env scripts/telegram-test.ts",
     "telegram:chat-id": "tsx --conditions=react-server --env-file-if-exists=.env scripts/telegram-chat-id.ts",
     "db:seed": "tsx --conditions=react-server --env-file-if-exists=.env scripts/db-seed.ts",
+    "db:clear": "tsx --conditions=react-server --env-file-if-exists=.env scripts/db-clear.ts",
     "db:backup": "bash scripts/db-backup.sh"
   },
   "dependencies": {
