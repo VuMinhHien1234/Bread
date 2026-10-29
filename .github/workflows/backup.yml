@@ -1,0 +1,55 @@
+# Sao lưu database Neon hằng tuần lên Google Drive (task G6.5). Hướng dẫn: docs/DEPLOY.md mục 5.
+# Secret cần có: DATABASE_URL, RCLONE_CONFIG (nội dung rclone.conf có remote tên "gdrive").
+# Biến tuỳ chọn (Settings → Variables): GDRIVE_FOLDER — thư mục trên Drive, mặc định "banh-mi-thanh-long-backup".
+name: Sao lưu database
+
+on:
+  schedule:
+    - cron: "0 20 * * 6" # 03:00 sáng Chủ nhật giờ Việt Nam
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      GDRIVE_FOLDER: ${{ vars.GDRIVE_FOLDER || 'banh-mi-thanh-long-backup' }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Kiểm tra secret
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          RCLONE_CONFIG_CONTENT: ${{ secrets.RCLONE_CONFIG }}
+        run: |
+          if [ -z "$DATABASE_URL" ] || [ -z "$RCLONE_CONFIG_CONTENT" ]; then
+            echo "::error::Thiếu secret DATABASE_URL hoặc RCLONE_CONFIG (xem docs/DEPLOY.md mục 5)"
+            exit 1
+          fi
+
+      - name: Cài pg_dump (bản 17, khớp Neon) và rclone
+        run: |
+          sudo install -d /usr/share/postgresql-common/pgdg
+          sudo curl -fsSL -o /usr/share/postgresql-common/pgdg/apt.postgresql.org.asc https://www.postgresql.org/media/keys/ACCC4CF8.asc
+          echo "deb [signed-by=/usr/share/postgresql-common/pgdg/apt.postgresql.org.asc] https://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" | sudo tee /etc/apt/sources.list.d/pgdg.list
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq postgresql-client-17 rclone
+          echo "/usr/lib/postgresql/17/bin" >> "$GITHUB_PATH"
+
+      - name: Sao lưu
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        run: bash scripts/db-backup.sh backups
+
+      - name: Tải lên Google Drive
+        env:
+          RCLONE_CONFIG_CONTENT: ${{ secrets.RCLONE_CONFIG }}
+        run: |
+          mkdir -p ~/.config/rclone
+          printf '%s\n' "$RCLONE_CONFIG_CONTENT" > ~/.config/rclone/rclone.conf
+          rclone copy backups "gdrive:$GDRIVE_FOLDER" --progress
+          # Giữ 12 bản gần nhất (khoảng 3 tháng)
+          rclone delete "gdrive:$GDRIVE_FOLDER" --min-age 90d

@@ -1,0 +1,18 @@
+node_modules
+.next
+.env
+.env.local
+.env.*.local
+*.tsbuildinfo
+next-env.d.ts
+.DS_Store
+
+# Sao lưu database
+/backups
+
+# Netlify CLI
+.netlify
+
+# File không thuộc dự án web
+_to_delete/
+pdp_exp1_ovf.ipynb

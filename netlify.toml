@@ -1,0 +1,14 @@
+# Netlify tự nhận Next.js (OpenNext adapter) — không cần cài plugin thủ công.
+# Deploy: push nhánh main → bản chính thức; mỗi pull request → bản xem trước (Deploy Preview).
+[build]
+  command = "npm run build"
+
+[build.environment]
+  NODE_VERSION = "22"
+  NEXT_TELEMETRY_DISABLED = "1"
+
+# Font tự host: cache dài hạn (tên file có mã băm nên đổi font sẽ đổi URL)
+[[headers]]
+  for = "/_next/static/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"

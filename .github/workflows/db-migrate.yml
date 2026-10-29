@@ -1,0 +1,33 @@
+# Chạy migration lên database Neon thật — bấm tay khi có migration mới (Actions → "Migration database" → Run workflow).
+# Secret cần có: DATABASE_URL. Nên chạy TRƯỚC khi merge code dùng bảng/cột mới.
+name: Migration database
+
+on:
+  workflow_dispatch:
+    inputs:
+      confirm:
+        description: 'Gõ "migrate" để xác nhận chạy trên database thật'
+        required: true
+
+permissions:
+  contents: read
+
+jobs:
+  migrate:
+    if: ${{ github.event.inputs.confirm == 'migrate' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - run: npm ci --no-audit --no-fund
+
+      - name: drizzle-kit migrate
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        run: npm run db:migrate

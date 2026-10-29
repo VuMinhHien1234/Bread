@@ -1,0 +1,231 @@
+@import "tailwindcss";
+
+/*
+ * Design token "Tiệm bánh thủ công": xanh rêu đậm + đồng thau trên nền kem.
+ * Hình khối vuông vức, đường viền mảnh, gần như không đổ bóng; tiêu đề dùng font có chân (Newsreader).
+ * Mọi cặp chữ/nền đã kiểm tra tương phản >= 4.5:1. Component chỉ dùng token, không viết mã màu trực tiếp.
+ */
+@theme {
+  --color-bg: #f5f1e8; /* kem */
+  --color-surface: #fbf9f4;
+  --color-cream-deep: #ece5d5; /* dải nền kem đậm để tách mục */
+  --color-border: #d9d0bd;
+  --color-text: #1c1a16; /* đen ấm */
+  --color-text-muted: #5d574b;
+  --color-primary: #1f3a2f; /* xanh rêu đậm */
+  --color-primary-hover: #152a21;
+  --color-primary-foreground: #f5f1e8;
+  --color-ink: #13221b; /* nền khu vực tối (hero, chân trang) */
+  --color-ivory: #f5f1e8; /* chữ trên nền tối */
+  --color-brass: #c2a061; /* đồng thau: đường kẻ, điểm nhấn trên nền tối */
+  --color-brass-text: #7a5d2c; /* đồng thau đậm dùng cho chữ trên nền sáng */
+  --color-accent-green: #2f5d46;
+  --color-accent-yellow: #c2a061;
+  --color-accent-yellow-foreground: #1c1a16;
+  --color-live: #6fcf97; /* chấm "đang mở cửa" (trang trí, không mang chữ) */
+  --color-danger: #a8261f;
+  --color-danger-foreground: #ffffff;
+
+  --radius-card: 0.125rem;
+  --radius-button: 0.125rem;
+  --shadow-card: 0 1px 0 rgb(28 26 22 / 0.04), 0 18px 40px -24px rgb(28 26 22 / 0.25);
+
+  --font-heading: var(--font-display), Georgia, "Times New Roman", serif;
+  --font-body: var(--font-sans), system-ui, sans-serif;
+
+  --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@layer base {
+  html {
+    background-color: var(--color-bg);
+    color: var(--color-text);
+    font-family: var(--font-body);
+    /* 16px: dưới mức này iPhone tự phóng to khi bấm vào ô nhập */
+    font-size: 16px;
+    -webkit-text-size-adjust: 100%;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    scroll-behavior: smooth;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
+
+  body {
+    overflow-x: clip;
+    line-height: 1.6;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-heading);
+    font-weight: 500;
+    /* Dấu tiếng Việt chồng (ễ, ặ, ỗ) cần khoảng dòng rộng hơn tiếng Anh một chút */
+    line-height: 1.18;
+    letter-spacing: -0.015em;
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  ::selection {
+    background: var(--color-brass);
+    color: var(--color-ink);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-brass-text);
+    outline-offset: 3px;
+  }
+}
+
+@layer components {
+  /* Dòng chữ nhỏ viết hoa giãn chữ phía trên tiêu đề mục */
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-family: var(--font-body);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--color-brass-text);
+  }
+
+  .eyebrow::before {
+    content: "";
+    width: 1.75rem;
+    height: 1px;
+    background: currentColor;
+    opacity: 0.7;
+  }
+
+  .eyebrow-light {
+    color: var(--color-brass);
+  }
+
+  /* Đường kẻ đồng thau ngắn dưới tiêu đề mục */
+  .heading-rule::after {
+    content: "";
+    display: block;
+    width: 2.5rem;
+    height: 1px;
+    margin-top: 0.75rem;
+    background: var(--color-brass);
+  }
+
+  /* Hoa văn ngăn cách: — ◆ — */
+  .ornament {
+    display: flex;
+    align-items: center;
+    gap: 0.875rem;
+    color: var(--color-brass);
+  }
+
+  .ornament::before,
+  .ornament::after {
+    content: "";
+    height: 1px;
+    flex: 1;
+    background: currentColor;
+    opacity: 0.55;
+  }
+
+  /* Liên kết có gạch chân mảnh chạy ra khi rê chuột */
+  .link-line {
+    background-image: linear-gradient(currentColor, currentColor);
+    background-size: 0% 1px;
+    background-position: 0 100%;
+    background-repeat: no-repeat;
+    padding-bottom: 2px;
+    transition: background-size 0.35s var(--ease-out-soft);
+  }
+
+  .link-line:hover,
+  .link-line[aria-current="page"] {
+    background-size: 100% 1px;
+  }
+
+  /* Dải nền tràn hết chiều rộng màn hình, nằm trong khung nội dung */
+  .full-bleed {
+    margin-inline: calc(50% - 50vw);
+    padding-inline: calc(50vw - 50%);
+  }
+
+  /* Vân giấy rất nhẹ cho nền tối — vẽ bằng SVG nội tuyến, không tải thêm ảnh */
+  .grain {
+    position: relative;
+    isolation: isolate;
+  }
+
+  .grain::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    opacity: 0.08;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .6 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  /* Ảnh trong thẻ món phóng nhẹ khi rê chuột */
+  .zoom-on-hover img,
+  .zoom-on-hover [role="img"] svg {
+    transition: transform 0.8s var(--ease-out-soft);
+  }
+
+  .zoom-on-hover:hover img,
+  .zoom-on-hover:hover [role="img"] svg {
+    transform: scale(1.04);
+  }
+
+  /* Hiện dần khi tải trang (chỉ CSS, tắt khi người dùng chọn giảm chuyển động) */
+  .rise {
+    animation: rise 0.9s var(--ease-out-soft) both;
+  }
+
+  .rise-delay-1 {
+    animation-delay: 0.08s;
+  }
+
+  .rise-delay-2 {
+    animation-delay: 0.16s;
+  }
+
+  .rise-delay-3 {
+    animation-delay: 0.24s;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .rise {
+      animation: none;
+    }
+
+    .zoom-on-hover img,
+    .zoom-on-hover [role="img"] svg {
+      transition: none;
+    }
+  }
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
