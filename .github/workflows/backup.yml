@@ -18,7 +18,7 @@ jobs:
     env:
       GDRIVE_FOLDER: ${{ vars.GDRIVE_FOLDER || 'banh-mi-thanh-long-backup' }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Kiểm tra secret
         env:
